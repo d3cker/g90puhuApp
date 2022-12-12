@@ -1,7 +1,5 @@
 import sys
 import serial
-import select
-import threading
 
 XIEGU_HEADER =  b'\xfe\xfe\x88\xe0'
 G90_HEADER =  b'\xfe\xfe\xe0\x88'
@@ -61,11 +59,8 @@ cat_command_sub = {
           }
 }
 
-
-
 serRIG = serial.Serial('/dev/ttyG90IN', 19200,bytesize=8, parity='N', stopbits=1, timeout = 0.1)
 serOUT = serial.Serial('/dev/ttyUSB0', 19200,bytesize=8, parity='N', stopbits=1, timeout = 0.1)
-
 
 def printHex(byteStr: bytes) -> str:
     formatedHex = ""
@@ -74,7 +69,6 @@ def printHex(byteStr: bytes) -> str:
     for idx in range(len(byteStr)):
         formatedHex += "{:02x} ".format(byteStr[idx])
     return formatedHex.upper()
-
 
 def decodeReply(command):
     return "Reply from G90"
@@ -88,7 +82,8 @@ def decodeCat(command):
     elif command[0:4] == G90_HEADER:
         return decodeReply(command)
     else:
-        return " Unknown packet"
+        decoded_command = " Unknown packet: " + str(printHex(command))
+        return decoded_command
 
     if command[4] in cat_command_list:
         decoded_command += cat_command_list[command[4]]
