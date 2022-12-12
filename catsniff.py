@@ -3,6 +3,9 @@ import serial
 import select
 import threading
 
+XIEGU_HEADER =  b'\xfe\xfe\x88\xe0'
+G90_HEADER =  b'\xfe\xfe\xe0\x88'
+
 cat_command_list = {
     0x00: 'Set active VFO freq.',
     0x01: 'Set active VFO mode',
@@ -60,7 +63,7 @@ cat_command_sub = {
 
 
 
-serRIG = serial.Serial('/dev/ttyGSOCIN', 19200,bytesize=8, parity='N', stopbits=1, timeout = 0.1)
+serRIG = serial.Serial('/dev/ttyG90IN', 19200,bytesize=8, parity='N', stopbits=1, timeout = 0.1)
 serOUT = serial.Serial('/dev/ttyUSB0', 19200,bytesize=8, parity='N', stopbits=1, timeout = 0.1)
 
 
@@ -70,14 +73,22 @@ def printHex(byteStr: bytes) -> str:
         return
     for idx in range(len(byteStr)):
         formatedHex += "{:02x} ".format(byteStr[idx])
-    return formatedHex
+    return formatedHex.upper()
+
+
+def decodeReply(command):
+    return "Reply from G90"
 
 def decodeCat(command):
     decoded_command = "unknown"
     if len(command) < 3:
-        return("Invalid command")
-    if command[0:4] ==  b'\xfe\xfe\x88\xe0':
+        return("Invalid command {}".format(len(command)))
+    if command[0:4] == XIEGU_HEADER:
         decoded_command = "HEADER + "
+    elif command[0:4] == G90_HEADER:
+        return decodeReply(command)
+    else:
+        return " Unknown packet"
 
     if command[4] in cat_command_list:
         decoded_command += cat_command_list[command[4]]
@@ -87,9 +98,6 @@ def decodeCat(command):
                     decoded_command += cat_command_sub[command[4]][command[5]]
                 else:
                     decoded_command += " Unkonwn subcommand {:02x}".format(command[5])
-#            else:
-#                if command[5] != "":
-#                    decoded_command += " + " + str(printHex(command[5:-1]))
     else:
         decoded_command += str(printHex(command[4:-1]))
 
@@ -99,11 +107,12 @@ def decodeCat(command):
 while True:
     rigString = serRIG.read_until(b'\xfd')
     if len(rigString)>0:
-        print("\t\t\t\t\t" + decodeCat(rigString) + "\r",end="")
+        print("\t\t\t\t\t\t" + "<< " + decodeCat(rigString) + "\r",end="")
         print("Flr: " + str(printHex(rigString)))
         serOUT.write(rigString)
 
     g90String = serOUT.read_until(b'\xfd')
     if len(g90String)>0:
+        print("\t\t\t\t\t\t" + ">> " + decodeCat(g90String) + "\r",end="")
         print("G90: " + printHex(g90String))
         serRIG.write(g90String)
