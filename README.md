@@ -125,6 +125,11 @@ sever without GSOC application.
 # python g90sniffer.py
 ```
 
+* Start GSOC application
+```
+# /usr/local/gsoc/gsoc_app_v1
+```
+
 ### Output
 
 Click on the image below to view sniffer in action:
