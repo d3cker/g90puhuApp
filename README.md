@@ -47,18 +47,18 @@ Setup: 19200 1
 
 ### Output
 ```
-Flr: FE FE 88 E0 03 FD 				        << HEADER + Get active VFO freq
-G90: FE FE 88 E0 03 FD 				        >> HEADER + Get active VFO freq
+Flr: FE FE 88 E0 03 FD 				<< HEADER + Get active VFO freq
+G90: FE FE 88 E0 03 FD 				>> HEADER + Get active VFO freq
 G90: FE FE E0 88 03 00 00 16 07 00 FD 		>> Reply from G90
-Flr: FE FE 88 E0 07 01 FD 			        << HEADER + Select VFOSelect VFO-A
-G90: FE FE 88 E0 07 01 FD 			        >> HEADER + Select VFOSelect VFO-A
-G90: FE FE E0 88 FB FD 				        >> Reply from G90
-Flr: FE FE 88 E0 03 FD 				        << HEADER + Get active VFO freq
-G90: FE FE 88 E0 03 FD 				        >> HEADER + Get active VFO freq
+Flr: FE FE 88 E0 07 01 FD 			<< HEADER + Select VFOSelect VFO-A
+G90: FE FE 88 E0 07 01 FD 			>> HEADER + Select VFOSelect VFO-A
+G90: FE FE E0 88 FB FD 				>> Reply from G90
+Flr: FE FE 88 E0 03 FD 				<< HEADER + Get active VFO freq
+G90: FE FE 88 E0 03 FD 				>> HEADER + Get active VFO freq
 G90: FE FE E0 88 03 00 00 07 07 00 FD 		>> Reply from G90
-Flr: FE FE 88 E0 04 FD 				        << HEADER + Get active VFO mode
-G90: FE FE 88 E0 04 FD 				        >> HEADER + Get active VFO mode
-G90: FE FE E0 88 04 01 02 FD 			    >> Reply from G90
+Flr: FE FE 88 E0 04 FD 				<< HEADER + Get active VFO mode
+G90: FE FE 88 E0 04 FD 				>> HEADER + Get active VFO mode
+G90: FE FE E0 88 04 01 02 FD 			>> Reply from G90
 ```
 
 
@@ -94,7 +94,7 @@ Due to closed source nature of GSOC application the setup requires some tricks
 to make it work as expected. During the research it turns out that GSOC uses 
 `/dev/ttyS1` for communication with G90 main unit using `head<>body` 
 [protocol](https://github.com/zeroping/xiegu-g90-headprotocol/). As for now 
-there is no known method to pass other port as a parameter for command line. 
+there is no known method to pass other port as a parameter for a command line.
 GSOC application is also very picky as it won't accept a link as a device type.
 It's recommended to start **g90sniffer.py** using SSH connection as the output
 requires big console terminal. 
