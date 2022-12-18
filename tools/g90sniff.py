@@ -29,7 +29,7 @@ def grabG90():
             packet_no += 1
             str_bytes = str(packet_no).zfill(4)
             print("syncing G90[" + str_bytes + "]..." + str(packetbytes[0:10]) + "\r" ,end = "")
-            packetbytes = serG90.read(372)
+            packetbytes = serG90.read(373)
         g90_in = packetbytes
         packetG90 += 1
 
