@@ -59,8 +59,8 @@ cat_command_sub = {
           }
 }
 
-serRIG = serial.Serial('/dev/ttyG90IN', 19200,bytesize=8, parity='N', stopbits=1, timeout = 0.1)
-serOUT = serial.Serial('/dev/ttyUSB0', 19200,bytesize=8, parity='N', stopbits=1, timeout = 0.1)
+serRIG = serial.Serial('/dev/ttyG90IN', 19200,bytesize=8, parity='N', stopbits=1, timeout = 0.05)
+serOUT = serial.Serial('/dev/ttyUSB0', 19200,bytesize=8, parity='N', stopbits=1, timeout = 0.05)
 
 def printHex(byteStr: bytes) -> str:
     formatedHex = ""
